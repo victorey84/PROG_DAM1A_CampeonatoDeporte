@@ -3,12 +3,17 @@
  */
 package modelo;
 
+import dao.AccesoEquipo;
+import dao.AccesoJugador;
+
 public class JugadorEquipo {
-	Equipo equipo;
-	Jugador jugador;
-	int añoEntrada;
-	int añoSalida;
-	int partidosTitular;
+	private static final String SEPARADOR = ";";
+	
+	private Equipo equipo;
+	private Jugador jugador;
+	private int añoEntrada;
+	private int añoSalida;
+	private int partidosTitular;
 	
 	/**
 	 * @param equipo
@@ -23,6 +28,17 @@ public class JugadorEquipo {
 		this.añoEntrada = añoEntrada;
 		this.añoSalida = añoSalida;
 		this.partidosTitular = partidosTitular;
+	}
+	
+	public JugadorEquipo(String cadena) {
+		String[] parametros = cadena.split(SEPARADOR);
+		int codigoEquipo = Integer.parseInt(parametros[0]);
+		this.equipo = AccesoEquipo.consultar(codigoEquipo);
+		int codigoJugador = Integer.parseInt(parametros[1]);
+		this.jugador = AccesoJugador.consultar(codigoJugador);
+		this.añoEntrada = Integer.parseInt(parametros[2]);
+		this.añoSalida = Integer.parseInt(parametros[3]);
+		this.añoEntrada = Integer.parseInt(parametros[2]);
 	}
 
 	/**
@@ -106,5 +122,12 @@ public class JugadorEquipo {
 				+ "]";
 	}
 	
+	public String toStringWithSeparators() {
+		return equipo.getCodigo() + SEPARADOR +
+				jugador.getCodigo() + SEPARADOR +
+				añoEntrada + SEPARADOR +
+				añoSalida + SEPARADOR +
+				partidosTitular;
+	}
 	
 }

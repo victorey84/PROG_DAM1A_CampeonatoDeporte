@@ -3,7 +3,7 @@ package modelo;
 public class Equipo {
 	//Hecho por Alvaro Delicado
 
-
+	private static final String SEPARATOR = ";";
 	private int codigo;
 	private String nombre;
 	private int añoFundacion;
@@ -11,14 +11,37 @@ public class Equipo {
 	private String estadio;
 	private int sociosAficionados;
 
-	public Equipo(int codigo, String nombre, int anioFundacion, String lugarSede, String estadio, int sociosAficionados) {
+	public Equipo(int codigo, String nombre, int añoFundacion, String lugarSede, String estadio, int sociosAficionados) {
 		this.codigo = codigo;
 		this.nombre = nombre;
-		this.añoFundacion = anioFundacion;
+		this.añoFundacion = añoFundacion;
 		this.lugarSede = lugarSede;
 		this.estadio = estadio;
 		this.sociosAficionados = sociosAficionados;
 	}
+	
+	
+
+	/*public Equipoe(String nombre, int añoFundacion, String lugarSede, String estadio, int sociosAficionados) {
+		this.nombre = nombre;
+		this.añoFundacion = añoFundacion;
+		this.lugarSede = lugarSede;
+		this.estadio = estadio;
+		this.sociosAficionados = sociosAficionados;
+	}
+*/
+
+
+	public Equipo(String nombre, int añoFundacion, String lugarSede, String estadio, int sociosAficionados) {
+		this.nombre = nombre;
+		this.añoFundacion = añoFundacion;
+		this.lugarSede = lugarSede;
+		this.estadio = estadio;
+		this.sociosAficionados = sociosAficionados;
+	}
+	
+
+
 
 	public int getCodigo() {
 		return codigo;
@@ -36,11 +59,11 @@ public class Equipo {
 		this.nombre = nombre;
 	}
 
-	public int getAnioFundacion() {
+	public int getAñoFundacion() {
 		return añoFundacion;
 	}
 
-	public void setAnioFundacion(int anioFundacion) {
+	public void setAñoFundacion(int anioFundacion) {
 		this.añoFundacion = anioFundacion;
 	}
 
@@ -68,13 +91,24 @@ public class Equipo {
 		this.sociosAficionados = sociosAficionados;
 	}
 
-	public String toString() {
-		return "Equipo [codigo = " + codigo + 
-				", nombre = " + nombre + 
-				", anioFundacion = " + añoFundacion + 
-				", lugarSede = " + lugarSede + 
-				", estadio = " + estadio + 
-				", sociosAficionados = " + sociosAficionados + "]";
+	
+	public String toStringWithSeparators() {
+		return codigo + SEPARATOR 
+				+ nombre + SEPARATOR 
+				+ añoFundacion + SEPARATOR 
+				+ lugarSede + SEPARATOR 
+				+ estadio + SEPARATOR 
+				+ sociosAficionados;
 	}
+
+	@Override
+	public String toString() {
+		return "Equipo [codigo=" + codigo + ", nombre=" + nombre + ", añoFundacion=" + añoFundacion + ", lugarSede="
+				+ lugarSede + ", estadio=" + estadio + ", sociosAficionados=" + sociosAficionados + "]";
+	}
+	
+	
+	
+	
 
 }

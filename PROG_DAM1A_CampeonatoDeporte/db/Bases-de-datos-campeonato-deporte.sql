@@ -6,16 +6,17 @@ CREATE TABLE equipo
     lugar_sede VARCHAR NOT NULL,
     estadio VARCHAR NOT NULL,
     socios_aficionados INTEGER NOT NULL,
-    PRIMARY KEY(codigo)
+    PRIMARY KEY(codigo autoincrement)
 );
 
 CREATE TABLE jugador
 (
-    codigo INTEGER NOT NULL PRIMARY KEY,
+    codigo INTEGER NOT NULL,
     nombre VARCHAR NOT NULL,
     fecha_nacimiento VARCHAR NOT NULL,
     nacionalidad VARCHAR NOT NULL,
-    posicion VARCHAR NOT NULL
+    posicion VARCHAR NOT NULL,
+		PRIMARY KEY(codigo AUTOINCREMENT)
 );
 
 CREATE TABLE jugador_equipo

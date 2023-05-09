@@ -1,12 +1,12 @@
 package modelo;
 
-
-
 /*
- * Beni Burdet DAM 1ï¿½A
+ * Beni Burdet DAM 1ºA
  */
 
 public class Jugador {
+
+	private static final String SEPARADOR = ";";
 
 	private int codigo;
 	private String nombre;
@@ -14,19 +14,19 @@ public class Jugador {
 	private String nacionalidad;
 	private String posicion;
 
-	public Jugador(int codigo, String nombre, String fecha_nacimiento, String nacionalidad, String posicion) {
+	public Jugador(int codigo, String nombre, String fechaNacimiento, String nacionalidad, String posicion) {
 		super();
 		this.codigo = codigo;
 		this.nombre = nombre;
-		this.fechaNacimiento = fecha_nacimiento;
+		this.fechaNacimiento = fechaNacimiento;
 		this.nacionalidad = nacionalidad;
 		this.posicion = posicion;
 	}
 
-	public Jugador(String nombre, String fecha_nacimiento, String nacionalidad, String posicion) {
+	public Jugador(String nombre, String fechaNacimiento, String nacionalidad, String posicion) {
 		super();
 		this.nombre = nombre;
-		this.fechaNacimiento = fecha_nacimiento;
+		this.fechaNacimiento = fechaNacimiento;
 		this.nacionalidad = nacionalidad;
 		this.posicion = posicion;
 	}
@@ -47,12 +47,12 @@ public class Jugador {
 		this.nombre = nombre;
 	}
 
-	public String getFecha_nacimiento() {
+	public String getFechaNacimiento() {
 		return fechaNacimiento;
 	}
 
-	public void setFecha_nacimiento(String fecha_nacimiento) {
-		this.fechaNacimiento = fecha_nacimiento;
+	public void setFechaNacimiento(String fechaNacimiento) {
+		this.fechaNacimiento = fechaNacimiento;
 	}
 
 	public String getNacionalidad() {
@@ -73,8 +73,13 @@ public class Jugador {
 
 	@Override
 	public String toString() {
-		return "Jugador [codigo=" + codigo + ", nombre=" + nombre + ", fecha_nacimiento=" + fechaNacimiento
+		return "\nJugador [codigo=" + codigo + ", nombre=" + nombre + ", fechaNacimiento=" + fechaNacimiento
 				+ ", nacionalidad=" + nacionalidad + ", posicion=" + posicion + "]";
+	}
+
+	public String toStringWithSeparators() {
+		return this.codigo + SEPARADOR + this.nombre + SEPARADOR + this.fechaNacimiento + SEPARADOR + this.nacionalidad
+				+ SEPARADOR + this.posicion;
 	}
 
 }
