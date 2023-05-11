@@ -21,6 +21,37 @@ public class AccesoEquipo {
 
 	// Hecho por Alvaro Delicado
 
+	public static boolean esta(int codigo) {
+		Connection conexion = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+
+		try {
+			// Establecer la conexión con la base de datos
+			conexion = ConfigBD.abrirConexion();
+			// Preparar la consulta SQL
+			String sql = "SELECT codigo FROM equipo WHERE codigo = ?";
+			pstmt = conexion.prepareStatement(sql);
+			pstmt.setInt(1, codigo);
+
+			// Ejecutar la consulta SQL
+			rs = pstmt.executeQuery();
+
+			return rs.next();
+
+		} catch (SQLException ex) {
+			ex.printStackTrace();
+		} finally {
+			// Cerrar los objetos de conexión
+			try {
+				ConfigBD.cerrarConexion(conexion);
+			} catch (Exception e) {
+				/* ignored */ }
+		}
+
+		return false;
+	}
+
 	// Consulta todos los equipos de la tabla equipo y los devuelve en un List
 	public static List<Equipo> consultarTodo() {
 		List<Equipo> todosEquipos = new ArrayList<Equipo>();
@@ -70,38 +101,18 @@ public class AccesoEquipo {
 				Statement sentencia = conexion.createStatement();
 				ResultSet resultados = sentencia.executeQuery(sentenciaConsultar);
 				while (resultados.next()) {
-					 String nombre = resultados.getString("nombre");
-					 int añoFundacion = resultados.getInt("año_fundacion");
-					 String lugarSede = resultados.getString("lugar_sede");
-					 String estadio = resultados.getString("estadio");
-					 int sociosAficionados = resultados.getInt("socios_aficionados");
+					String nombre = resultados.getString("nombre");
+					int añoFundacion = resultados.getInt("año_fundacion");
+					String lugarSede = resultados.getString("lugar_sede");
+					String estadio = resultados.getString("estadio");
+					int sociosAficionados = resultados.getInt("socios_aficionados");
 
 					e = new Equipo(codigo, nombre, añoFundacion, lugarSede, estadio, sociosAficionados);
 
 				}
 				resultados.close();
 				sentencia.close();
-			
-			/*try {
-				int contador = 0;
-				conexion = ConfigBD.abrirConexion();
-				System.out.println("Conectado");
-				int contadorEquipos = 0;
-				String sentenciaConsultar = "SELECT * FROM equipo";
-				Statement sentencia = conexion.createStatement();
-				ResultSet resultados = sentencia.executeQuery(sentenciaConsultar);
-				while (resultados.next()) {
-					contador++;
-				}
 
-				for (int i = 0; i < contador; i++) {
-					if (codigo == resultados.getInt("codigo")) {
-						e = new Equipo(resultados.getInt("codigo"), resultados.getString("nombre"),
-								resultados.getInt("año_fundacion"), resultados.getString("lugar_sede"),
-								resultados.getString("estadio"), resultados.getInt("socios_aficionados"));
-						return e;
-					}
-				}*/
 				resultados.close();
 				sentencia.close();
 			}
@@ -163,7 +174,7 @@ public class AccesoEquipo {
 			String estadio = equipo.getEstadio();
 			int sociosAficionados = equipo.getSociosAficionados();
 			conexion = ConfigBD.abrirConexion();
-			String sentenciaActualizar = "UPDATE equipo " + "SET nombre = ?, año_fundacion = ?, lugar_sede = ?, estadio = ?, socios_aficionados = ? WHERE codigo = ?";
+			String sentenciaActualizar = "UPDATE equipo SET nombre = ?, año_fundacion = ?, lugar_sede = ?, estadio = ?, socios_aficionados = ? WHERE codigo = ?";
 			PreparedStatement sentencia = conexion.prepareStatement(sentenciaActualizar);
 			sentencia.setString(1, nombre);
 			sentencia.setInt(2, añoFundacion);
@@ -172,7 +183,7 @@ public class AccesoEquipo {
 			sentencia.setInt(5, sociosAficionados);
 			sentencia.setInt(6, codigo);
 
-			int filasActualizadas = sentencia.executeUpdate(sentenciaActualizar);
+			int filasActualizadas = sentencia.executeUpdate();
 			if (filasActualizadas == 0) {
 				return false;
 			} else {
@@ -208,9 +219,8 @@ public class AccesoEquipo {
 		return false;
 	}
 
-
-	//Importa la tabla equipo desde un fichero
-	public static boolean ImportarPartidos(String path) {
+	// Importa la tabla equipo desde un fichero
+	public static boolean importarEquipos(String path) {
 		BufferedReader br = null;
 		try {
 			File fichero = new File(path);
@@ -219,21 +229,21 @@ public class AccesoEquipo {
 			String linea = br.readLine();
 			while (linea != null) {
 				String[] datos = linea.split(";");
-				
+
 				int codigo = Integer.parseInt(datos[0]);
 				String nombre = datos[1];
 				int añoFundacion = Integer.parseInt(datos[2]);
 				String lugarSede = datos[3];
-				String estadio = datos[4];
+				String estadio = datos[5];
 				int sociosAficionados = Integer.parseInt(datos[5]);
 
 				Equipo e = new Equipo(codigo, nombre, añoFundacion, lugarSede, estadio, sociosAficionados);
-				
+
 				insertar(e);
 				linea = br.readLine();
 
 			}
-			
+
 		} catch (FileNotFoundException fnfe) {
 			System.out.println("Error al abrir el fichero: " + fnfe.getMessage());
 			fnfe.printStackTrace();
@@ -255,13 +265,12 @@ public class AccesoEquipo {
 		}
 		return false;
 	}
-	
-	
+
 	// Exporta la tabla equipo a un fichero
 
-	public static boolean ExportarEquipos(String path) {
+	public static boolean exportarEquipos(String path) {
 		BufferedWriter bw = null;
-		List<Equipo> equipos = new ArrayList<Equipo>();
+		List<Equipo> equipos = consultarTodo();
 		try {
 			bw = new BufferedWriter(new FileWriter(path, false));
 			for (int i = 0; i < equipos.size(); i++) {
@@ -285,40 +294,6 @@ public class AccesoEquipo {
 			}
 		}
 		return false;
-	}
-	 
-	public static void main(String args[]) {
-		//Equipo e = new Equipo("a", 1, "a", "a", 1);
-	//	Equipo e1 = new Equipo("b", 2, "b", "b", 2);
-/*
-		AccesoEquipo.eliminar(0);
-		AccesoEquipo.eliminar(1);
-		AccesoEquipo.eliminar(3);
-		AccesoEquipo.eliminar(4);
-		AccesoEquipo.eliminar(5);
-		AccesoEquipo.eliminar(6);
-		AccesoEquipo.eliminar(7);
-		AccesoEquipo.eliminar(8);
-		AccesoEquipo.eliminar(9);
-		AccesoEquipo.eliminar(10);
-		AccesoEquipo.eliminar(11);
-		AccesoEquipo.eliminar(12);
-		AccesoEquipo.eliminar(13);
-		AccesoEquipo.eliminar(14);
-		AccesoEquipo.eliminar(15);
-		AccesoEquipo.eliminar(16);
-		AccesoEquipo.eliminar(17);
-		AccesoEquipo.eliminar(18);
-		*/
-		
-		//AccesoEquipo.insertar(e1);
-		//AccesoEquipo.insertar(e);
-		
-		
-		//System.out.println(AccesoEquipo.consultar(1));
-
-		//System.out.println(AccesoEquipo.consultarTodo());
-
 	}
 
 }

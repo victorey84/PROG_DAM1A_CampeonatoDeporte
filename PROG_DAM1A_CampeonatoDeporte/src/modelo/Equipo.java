@@ -43,6 +43,12 @@ public class Equipo {
 
 
 
+	public Equipo(int codigoEquipo) {
+		this.codigo = codigoEquipo;
+	}
+
+
+
 	public int getCodigo() {
 		return codigo;
 	}
