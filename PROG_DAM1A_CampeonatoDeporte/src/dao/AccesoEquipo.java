@@ -224,7 +224,7 @@ public class AccesoEquipo {
 				String nombre = datos[1];
 				int añoFundacion = Integer.parseInt(datos[2]);
 				String lugarSede = datos[3];
-				String estadio = datos[5];
+				String estadio = datos[4];
 				int sociosAficionados = Integer.parseInt(datos[5]);
 
 				Equipo e = new Equipo(codigo, nombre, añoFundacion, lugarSede, estadio, sociosAficionados);
