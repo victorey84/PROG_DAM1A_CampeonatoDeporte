@@ -56,8 +56,14 @@ public class Partido {
 
 	@Override
 	public String toString() {
-		return "Partido [codigoEquipoLocal=" + equipoLocal.getCodigo() + ", codigoEquipoVisitante=" + equipoVisitante.getCodigo()
-				+ ", a�oTemporada=" + añoTemporada + ", fecha=" + fecha + ", puntuacionLocal=" + puntuacionLocal
+		return "\nPartido [codigoEquipoLocal=" + equipoLocal.getCodigo() + ", codigoEquipoVisitante=" + equipoVisitante.getCodigo()
+				+ ", añoTemporada=" + añoTemporada + ", fecha=" + fecha + ", puntuacionLocal=" + puntuacionLocal
+				+ ", puntuacionVisitante=" + puntuacionVisitante + "]";
+	}
+	
+	public String toStringMultitabla() {
+		return "\nPartido [codigoEquipoLocal=" + equipoLocal.toString() + ", codigoEquipoVisitante=" + equipoVisitante.toString()
+				+ ", añoTemporada=" + añoTemporada + ", fecha=" + fecha + ", puntuacionLocal=" + puntuacionLocal
 				+ ", puntuacionVisitante=" + puntuacionVisitante + "]";
 	}
 

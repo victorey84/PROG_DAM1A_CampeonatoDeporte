@@ -7,7 +7,7 @@ import modelo.Jugador;
 import entrada.Teclado;
 
 /*
- * Beni Burdet DAM 1ºA
+ * @author Beni Burdet DAM 1A
  */
 
 public class MenuJugador {
