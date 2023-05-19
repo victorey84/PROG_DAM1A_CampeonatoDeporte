@@ -29,8 +29,8 @@ public class MenuPartido {
 		System.out.println("(5) Consultar todos los partidos de la base de datos ordenados por posicion.");
 		System.out.println("(6) Exportar los partidos de la base de datos al fichero de texto.");
 		System.out.println("(7) Importar los partidos del fichero a la base de datos.");
-
-		int opcion = Teclado.leerEntero("¿Opcion (0-7)?");
+		System.out.println("(8) Consultar partidos por temporada.");
+		int opcion = Teclado.leerEntero("¿Opcion (0-8)?");
 		return opcion;
 	}
 
@@ -152,11 +152,13 @@ public class MenuPartido {
 				break;
 			
 			case 8:
-				List<Partido> partidosMultitabla = AccesoPartido.consultarTodosPartidos();
-				if(partidosMultitabla == null) {
-					System.out.println("No hay Partidoes en la base de datos.");
+				int temporada = Teclado.leerEntero("¿Año de temporada? ");
+				List<Partido> partidosMultitabla = AccesoPartido.consultarPartidosTemporada(temporada);
+				if(partidosMultitabla.size() == 0) {
+					System.out.println("No hay Partidos en la base de datos.");
 				}else {
-					System.out.println(((Partido) partidosMultitabla).toStringMultitabla());
+					for (Partido partido: partidosMultitabla)
+					System.out.println(partido.toStringMultitabla());
 				}
 				
 				break;

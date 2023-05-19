@@ -62,7 +62,7 @@ public class Partido {
 	}
 	
 	public String toStringMultitabla() {
-		return "\nPartido [codigoEquipoLocal=" + equipoLocal.toString() + ", codigoEquipoVisitante=" + equipoVisitante.toString()
+		return "\nPartido [EquipoLocal=" + equipoLocal.toString() + ", EquipoVisitante=" + equipoVisitante.toString()
 				+ ", añoTemporada=" + añoTemporada + ", fecha=" + fecha + ", puntuacionLocal=" + puntuacionLocal
 				+ ", puntuacionVisitante=" + puntuacionVisitante + "]";
 	}
