@@ -20,6 +20,7 @@ import config.ConfigBD;
 import modelo.Equipo;
 import modelo.Jugador;
 import modelo.JugadorEquipo;
+import modelo.JugadoresTemporada;
 
 public class AccesoJugadorEquipo {
 	private final static String PATH = "datos\\jugador_equipo.txt";
@@ -223,5 +224,43 @@ public class AccesoJugadorEquipo {
 			}
 		}
 		return resultados;
+	}
+	
+	/**
+	 * @author Alvaro
+	 * @param equipoEntrada
+	 * @return
+	 */
+	public static List<JugadoresTemporada> consultarJugadoresTemporada(Equipo equipoEntrada) {
+		JugadoresTemporada jt= null;
+		List<JugadoresTemporada> listaJT = new ArrayList<JugadoresTemporada>();
+		Connection conexion = null;
+		try {
+			conexion = ConfigBD.abrirConexion();
+			String sentenciaConsultar = "SELECT je.año_entrada AS temporada, " + "COUNT(*) AS num_jugadores "
+					+ "FROM jugador_equipo je " + "JOIN equipo eq " + "ON je.codigo_equipo = eq.codigo "
+					+ "WHERE eq.codigo = ? " + "GROUP BY je.año_entrada " + "ORDER BY je.año_entrada ASC;";
+
+			PreparedStatement sentencia = conexion.prepareStatement(sentenciaConsultar);
+			sentencia.setInt(1, equipoEntrada.getCodigo());
+
+			ResultSet resultados = sentencia.executeQuery();
+			while (resultados.next()) {
+				int añoEntrada = resultados.getInt("temporada");
+				int numJugadores = resultados.getInt("num_jugadores");
+				jt = new JugadoresTemporada(añoEntrada, numJugadores);
+				listaJT.add(jt);
+			}
+			resultados.close();
+			sentencia.close();
+		} catch (SQLException sqle) {
+			System.out.println("Error de SQL: " + sqle.getMessage());
+			sqle.printStackTrace();
+		} finally {
+			if (conexion != null) {
+				ConfigBD.cerrarConexion(conexion);
+			}
+		}
+		return listaJT;
 	}
 }

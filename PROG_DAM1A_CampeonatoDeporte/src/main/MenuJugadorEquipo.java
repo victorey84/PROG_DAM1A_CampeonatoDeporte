@@ -12,6 +12,7 @@ import entrada.Teclado;
 import modelo.Equipo;
 import modelo.Jugador;
 import modelo.JugadorEquipo;
+import modelo.JugadoresTemporada;
 
 public class MenuJugadorEquipo {
 
@@ -24,6 +25,7 @@ public class MenuJugadorEquipo {
 		System.out.println("(5) Consultar todos los jugadores en equipos de la base de datos ordenados por año de entrada.");
 		System.out.println("(6) Exportar los jugadores en equipos de la base de datos al fichero de texto.");
 		System.out.println("(7) Importar los jugadores en equipos del fichero a la base de datos.");
+		System.out.println("(8) Consultar jugadores en equipo por temporada.");
 		return Teclado.leerEntero("¿Opción (0-7)? ");
 	}
 	
@@ -200,8 +202,23 @@ public class MenuJugadorEquipo {
 				}
 				break;
 			}
+			case 8: {
+				// (8) Consultar jugadores en equipo por temporada.
+				System.out.println("Existen los siguientes equipos:");
+				List<Equipo> equipos = AccesoEquipo.consultarTodo();
+				for (Equipo equipo: equipos) {
+					System.out.println(equipo);
+				}
+				int codigoEquipo = Teclado.leerEntero("¿Código de equipo? ");
+				Equipo equipo = new Equipo(codigoEquipo);
+				List<JugadoresTemporada> listaJT = AccesoJugadorEquipo.consultarJugadoresTemporada(equipo);
+				for (JugadoresTemporada jt: listaJT) {
+					System.out.println(jt);
+				}
+				break;
+			}
 			default:
-				System.out.println("La opción de menú debe estar comprendida entre 0 y 7.");
+				System.out.println("La opción de menú debe estar comprendida entre 0 y 8.");
 			}
 		} while (opcion != 0);
 	}
