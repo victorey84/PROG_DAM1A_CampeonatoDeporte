@@ -17,6 +17,7 @@ import java.util.List;
 import org.sqlite.SQLiteConfig;
 
 import config.ConfigBD;
+import modelo.GolesEquipo;
 import modelo.Jugador;
 
 /*
@@ -87,7 +88,7 @@ public class AccesoJugador {
 			config.enforceForeignKeys(true);
 			conexion = ConfigBD.abrirConexion();
 
-			String sentenciaEliminar = "DELETE FROM jugador " + "WHERE codigo = " + codigo;
+			String sentenciaEliminar = "DELETE FROM jugador WHERE codigo = " + codigo;
 			Statement sentencia = conexion.createStatement();
 			int filasEliminadas = sentencia.executeUpdate(sentenciaEliminar);
 			if (filasEliminadas != 0) {
@@ -220,7 +221,7 @@ public class AccesoJugador {
 				linea = flujoEntrada.readLine();
 
 			}
-			for(int i = 0; i < jugadores.size(); i++) {
+			for (int i = 0; i < jugadores.size(); i++) {
 				AccesoJugador.insertar(jugadores.get(i));
 			}
 		} catch (FileNotFoundException fnfe) {
@@ -243,6 +244,40 @@ public class AccesoJugador {
 			}
 		}
 		return jugadores;
+	}
+
+	public static List<GolesEquipo> consultarGolesEquipo(int codigo, int temporada) {
+		List<GolesEquipo> puntos = new ArrayList<GolesEquipo>();
+		Connection conexion = null;
+		try {
+			conexion = ConfigBD.abrirConexion();
+			String sentenciaConsultar = "SELECT ROUND(AVG( anotados),2) AS anotados, ROUND(AVG(recibidos),2) AS recibidos FROM "
+					+ "(SELECT p.puntuacion_local AS anotados, p.puntuacion_visitante AS recibidos FROM partido p "
+					+ "INNER JOIN equipo e ON p.codigo_equipo_local = e.codigo " + "WHERE año_temporada = " + temporada
+					+ " AND p.codigo_equipo_local = " + codigo + " " + "UNION "
+					+ "SELECT p.puntuacion_visitante AS anotados, p.puntuacion_local AS recibidos FROM partido p "
+					+ "INNER JOIN equipo e ON p.codigo_equipo_visitante = e.codigo " + "WHERE año_temporada = "
+					+ temporada + " AND p.codigo_equipo_visitante = " + codigo + ");";
+			Statement sentencia = conexion.createStatement();
+			ResultSet resultados = sentencia.executeQuery(sentenciaConsultar);
+			while (resultados.next()) {
+				double goles_anotados = resultados.getDouble("anotados");
+				double goles_recibidos = resultados.getDouble("recibidos");
+
+				GolesEquipo goles = new GolesEquipo(goles_anotados, goles_recibidos);
+				puntos.add(goles);
+			}
+			resultados.close();
+			sentencia.close();
+		} catch (SQLException sqle) {
+			System.out.println("Error de SQL: " + sqle.getMessage());
+			sqle.printStackTrace();
+		} finally {
+			if (conexion != null) {
+				ConfigBD.cerrarConexion(conexion);
+			}
+		}
+		return puntos;
 	}
 
 }
