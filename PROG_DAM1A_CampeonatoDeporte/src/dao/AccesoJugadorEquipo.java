@@ -23,6 +23,7 @@ import modelo.JugadorEquipo;
 
 public class AccesoJugadorEquipo {
 	private final static String PATH = "datos\\jugador_equipo.txt";
+	
 	public static boolean insertar(JugadorEquipo je) {
 		PreparedStatement ps = null;
 		Connection conexion = null;
@@ -57,9 +58,9 @@ public class AccesoJugadorEquipo {
 					+ "e.año_fundacion, e.lugar_sede, e.estadio, e.socios_aficionados,"
 					+ "j.codigo AS codigo_jugador, j.nombre AS nombre_jugador,"
 					+ "j.fecha_nacimiento, j.nacionalidad, j.posicion,"
-					+ "je.año_entrada, je.año_salida, je.partidos_titular"
-					+ "FROM equipo e JOIN jugador_equipo je ON e.codigo = je.codigo_equipo"
-					+ "JOIN jugador j ON j.codigo = je.codigo_jugador"
+					+ "je.año_entrada, je.año_salida, je.partidos_titular "
+					+ "FROM equipo e JOIN jugador_equipo je ON e.codigo = je.codigo_equipo "
+					+ "JOIN jugador j ON j.codigo = je.codigo_jugador "
 					+ "ORDER BY je.año_entrada;";
 			PreparedStatement ps = conexion.prepareStatement(query);
 			ResultSet resultado = ps.executeQuery();
@@ -102,9 +103,9 @@ public class AccesoJugadorEquipo {
 					+ "e.año_fundacion, e.lugar_sede, e.estadio, e.socios_aficionados,"
 					+ "j.codigo AS codigo_jugador, j.nombre AS nombre_jugador,"
 					+ "j.fecha_nacimiento, j.nacionalidad, j.posicion,"
-					+ "je.año_entrada, je.año_salida, je.partidos_titular"
-					+ "FROM equipo e JOIN jugador_equipo je ON e.codigo = je.codigo_equipo"
-					+ "JOIN jugador j ON j.codigo = je.codigo_jugador"
+					+ "je.año_entrada, je.año_salida, je.partidos_titular "
+					+ "FROM equipo e JOIN jugador_equipo je ON e.codigo = je.codigo_equipo "
+					+ "JOIN jugador j ON j.codigo = je.codigo_jugador "
 					+ "WHERE je.codigo_jugador = ? AND je.codigo_equipo = ?;";
 			PreparedStatement ps = conexion.prepareStatement(query);
 			ps.setInt(1, jugador.getCodigo());
@@ -131,8 +132,8 @@ public class AccesoJugadorEquipo {
 		int resultado = 0;
 		try {
 			conexion = ConfigBD.abrirConexion();
-			String query = "UPDATE jugador_equipo"
-					+ "SET año_entrada = ?, año_salida = ?, partidos_titular = ?"
+			String query = "UPDATE jugador_equipo "
+					+ "SET año_entrada = ?, año_salida = ?, partidos_titular = ? "
 					+ "WHERE codigo_equipo = ? AND codigo_jugador = ?;";
 			ps = conexion.prepareStatement(query);
 			ps.setInt(1, je.getAñoEntrada());
@@ -156,7 +157,7 @@ public class AccesoJugadorEquipo {
 		int resultado = 0;
 		try {
 			conexion = ConfigBD.abrirConexion();
-			String query = "DELETE FROM jugador_equipo"
+			String query = "DELETE FROM jugador_equipo "
 					+ "WHERE codigo_equipo = ? AND codigo_jugador = ?;";
 			ps = conexion.prepareStatement(query);
 			ps.setInt(1, codigoEquipo);

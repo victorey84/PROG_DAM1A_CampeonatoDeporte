@@ -163,6 +163,8 @@ public class MenuJugadorEquipo {
 				JugadorEquipo je = AccesoJugadorEquipo.consultar(jugadorElegido, equipoElegido);
 				if (je == null) {
 					System.out.println("No se ha encontrado ese jugador en equipo.");
+				} else {
+					System.out.println(je);
 				}
 				break;
 			}
