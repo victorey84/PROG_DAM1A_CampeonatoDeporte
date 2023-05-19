@@ -3,6 +3,7 @@ package main;
 import java.util.List;
 
 import dao.AccesoJugador;
+import modelo.GolesEquipo;
 import modelo.Jugador;
 import entrada.Teclado;
 
@@ -21,8 +22,9 @@ public class MenuJugador {
 		System.out.println("(5) Consultar todos los jugadores de la base de datos ordenados por posicion.");
 		System.out.println("(6) Exportar los jugadores de la base de datos al fichero de texto.");
 		System.out.println("(7) Importar los jugadores del fichero a la base de datos.");
+		System.out.println("(8) Consultar goles anotados y recibidos de un equipo durante una temporada.");
 
-		int opcion = Teclado.leerEntero("¿Opción (0-7)? ");
+		int opcion = Teclado.leerEntero("¿Opción (0-8)?");
 		return opcion;
 	}
 
@@ -117,8 +119,19 @@ public class MenuJugador {
 				}
 				break;
 				
+			case 8:
+				codigo = Teclado.leerEntero("Codigo del equipo:");
+				int tempor = Teclado.leerEntero("Temporada: ");
+				List<GolesEquipo> puntos = AccesoJugador.consultarGolesEquipo(codigo, tempor);
+				if(puntos == null) {
+					System.out.println("No hay jugadores en la base de datos.");
+				}else {
+					System.out.println(puntos);
+				}
+				
+				break;
 			default:
-				System.out.println("La opción debe estar comprendida entre 0 y 7.");
+				System.out.println("La opción debe estar comprendida entre 0 y 8.");
 			
 			}
 		} while (opcion != 0);
