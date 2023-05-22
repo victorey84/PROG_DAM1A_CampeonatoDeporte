@@ -495,8 +495,7 @@ public class AccesoPartido {
 		return false;
 	}
 	
-	/*
-	public static EquipoEstadistica consultarEstadisticas (Equipo equipoConsultar) {
+	public static EquipoEstadistica consultarEstadisticas (Equipo equipoConsultar, int anyoTemporada) {
 		Equipo equipo= null;
 		EquipoEstadistica estadistica = null;
 		Connection conexion = null;
@@ -508,37 +507,37 @@ public class AccesoPartido {
 		try {
 			conexion = ConfigBD.abrirConexion();
 			String sentenciaConsultar = 
-					"select codigo, equipo1, sum(ganados)as ganados\n"
-		
-					+ "from (\n"
-					+ "select e.codigo, e.nombre as equipo1, count(puntuacion_visitante) as ganados\n"
-					+ "FROM equipo e join partido p\n"
-					+ "on e.codigo = p.codigo_equipo_visitante\n"
-					+ "where e.codigo = 2\n"
-					+ "and puntuacion_visitante > puntuacion_local\n"
-					
-					+ "UNION all\n"
-					+ "\n"
-					
-					+ "select e.codigo as codigo, e.nombre as equipo1, count(puntuacion_local) as ganados\n"
-					+ "FROM equipo e join partido p\n"
-					+ "on e.codigo = p.codigo_equipo_local\n"
-					+ "where e.codigo = ?\n"
-					+ "and puntuacion_local > puntuacion_visitante\n"
-					+ ");";
+					"select codigo, equipo1, año_temporada, sum(ganados)as ganados\r\n"
+					+ "from (\r\n"
+					+ "select e.codigo, e.nombre as equipo1, p.año_temporada, count(puntuacion_visitante) as ganados\r\n"
+					+ "FROM equipo e join partido p\r\n"
+					+ "on e.codigo = p.codigo_equipo_visitante\r\n"
+					+ "where e.codigo = ?\r\n"
+					+ "and puntuacion_visitante > puntuacion_local\r\n"
+					+ "and p.año_temporada = ?\r\n"
+					+ "UNION all\r\n"
+					+ "select e.codigo as codigo, e.nombre as equipo1, p.año_temporada, count(puntuacion_local) as ganados\r\n"
+					+ "FROM equipo e join partido p\r\n"
+					+ "on e.codigo = p.codigo_equipo_local\r\n"
+					+ "where e.codigo = ?\r\n"
+					+ "and p.año_temporada = ?\r\n"
+					+ "and puntuacion_local > puntuacion_visitante);";
 			
 			PreparedStatement sentencia = conexion.prepareStatement(sentenciaConsultar);
 			sentencia.setInt(1, equipoConsultar.getCodigo());
+			sentencia.setInt(2, anyoTemporada);
+			sentencia.setInt(3, equipoConsultar.getCodigo());
+			sentencia.setInt(4, anyoTemporada);
 			ResultSet resultados = sentencia.executeQuery();
 			
-			System.out.println(sentenciaConsultar);
+			//System.out.println(sentenciaConsultar);
 			while (resultados.next()) {
 				
 				int codigo = resultados.getInt("codigo");
 				String nombre = resultados.getString("equipo1");
 				ganados = resultados.getInt("ganados");
 								
-				equipo= new Equipo(codigo,nombre);
+				equipo= new Equipo(codigo);
 				//partido = new Partido(equipoLocal, equipoVisitante, año_temporada, fecha, puntuacion_local, puntuacion_visitante);
 			}
 			resultados.close();
@@ -546,37 +545,38 @@ public class AccesoPartido {
 			
 			conexion2 = ConfigBD.abrirConexion();
 			String sentencia2Consulta2 = 
-					"select codigo, equipo1, sum(perdidos)as perdidos\n"
-					+ "from (\n"
-					+ "\n"
-					+ "\n"
-					+ "\n"
-					+ "select e.codigo as codigo, e.nombre as equipo1, count(puntuacion_local) as perdidos\n"
-					+ "FROM equipo e join partido p\n"
-					+ "on e.codigo = p.codigo_equipo_visitante\n"
-					+ "where e.codigo = 2\n"
-					+ "and puntuacion_local > puntuacion_visitante\n"
-					+ "UNION all\n"
-					+ "\n"
-					+ "select e.codigo as codigo, e.nombre as equipo1, count(puntuacion_visitante) as perdidos\n"
-					+ "FROM equipo e join partido p\n"
-					+ "on e.codigo = p.codigo_equipo_local\n"
-					+ "where e.codigo = 2\n"
-					+ "and puntuacion_local < puntuacion_visitante\n"
+					"select codigo, equipo1, año_temporada, sum(perdidos)as perdidos\r\n"
+					+ "from (\r\n"
+					+ "select e.codigo as codigo, e.nombre as equipo1, p.año_temporada, count(puntuacion_local) as perdidos\r\n"
+					+ "FROM equipo e join partido p\r\n"
+					+ "on e.codigo = p.codigo_equipo_visitante\r\n"
+					+ "where e.codigo = ?\r\n"
+					+ "and puntuacion_local > puntuacion_visitante\r\n"
+					+ "and p.año_temporada = ?\r\n"
+					+ "UNION all\r\n"
+					+ "select e.codigo as codigo, e.nombre as equipo1, p.año_temporada, count(puntuacion_visitante) as perdidos\r\n"
+					+ "FROM equipo e join partido p\r\n"
+					+ "on e.codigo = p.codigo_equipo_local\r\n"
+					+ "where e.codigo = ?\r\n"
+					+ "and puntuacion_local < puntuacion_visitante\r\n"
+					+ "and p.año_temporada = ?\r\n"
 					+ ");";
 
 			PreparedStatement sentencia2 = conexion2.prepareStatement(sentencia2Consulta2);
 			sentencia2.setInt(1, equipoConsultar.getCodigo());
+			sentencia2.setInt(2, anyoTemporada);
+			sentencia2.setInt(3, equipoConsultar.getCodigo());
+			sentencia2.setInt(4, anyoTemporada);
 			ResultSet resultados2 = sentencia2.executeQuery();
 
-			System.out.println(sentencia2Consulta2);
+			//System.out.println(sentencia2Consulta2);
 			while (resultados2.next()) {
 				
 				int codigo = resultados2.getInt("codigo");
 				String nombre = resultados2.getString("equipo1");
 				perdidos = resultados2.getInt("perdidos");
 								
-				equipo= new Equipo(codigo,nombre);
+				equipo= new Equipo(codigo);
 				//partido = new Partido(equipoLocal, equipoVisitante, año_temporada, fecha, puntuacion_local, puntuacion_visitante);
 			}
 			resultados2.close();
@@ -584,36 +584,38 @@ public class AccesoPartido {
 			
 			conexion3 = ConfigBD.abrirConexion();
 			String sentencia3Consulta3 = 
-					"select codigo, equipo1, sum(empate)as empate\n"
-					+ "from (\n"
-					+ "select e.codigo as codigo, e.nombre as equipo1, count(puntuacion_visitante) as empate\n"
-					+ "FROM equipo e join partido p\n"
-					+ "on e.codigo = p.codigo_equipo_local\n"
-					+ "where e.codigo = 2\n"
-					+ "and puntuacion_local = puntuacion_visitante\n"
-					+ "\n"
-					+ "UNION all\n"
-					+ "\n"
-					+ "select e.codigo as codigo, e.nombre as equipo1, count(puntuacion_local) as empate\n"
-					+ "FROM equipo e join partido p\n"
-					+ "on e.codigo = p.codigo_equipo_visitante\n"
-					+ "where e.codigo = 2\n"
-					+ "and puntuacion_local = puntuacion_visitante\n"
-					+ "\n"
+					"select codigo, equipo1, año_temporada, sum(empate)as empate\r\n"
+					+ "from (\r\n"
+					+ "select e.codigo as codigo, e.nombre as equipo1, p.año_temporada, count(puntuacion_visitante) as empate\r\n"
+					+ "FROM equipo e join partido p\r\n"
+					+ "on e.codigo = p.codigo_equipo_local\r\n"
+					+ "where e.codigo = ?\r\n"
+					+ "and puntuacion_local = puntuacion_visitante\r\n"
+					+ "and p.año_temporada = ?\r\n"
+					+ "UNION all\r\n"
+					+ "select e.codigo as codigo, e.nombre as equipo1, p.año_temporada, count(puntuacion_local) as empate\r\n"
+					+ "FROM equipo e join partido p\r\n"
+					+ "on e.codigo = p.codigo_equipo_visitante\r\n"
+					+ "where e.codigo = ?\r\n"
+					+ "and puntuacion_local = puntuacion_visitante\r\n"
+					+ "and p.año_temporada = ?\r\n"
 					+ ");";
 
 			PreparedStatement sentencia3 = conexion3.prepareStatement(sentencia3Consulta3);
 			sentencia3.setInt(1, equipoConsultar.getCodigo());
+			sentencia3.setInt(2, anyoTemporada);
+			sentencia3.setInt(3, equipoConsultar.getCodigo());
+			sentencia3.setInt(4, anyoTemporada);
 			ResultSet resultados3 = sentencia3.executeQuery();
 
-			System.out.println(sentencia3Consulta3);
+			//System.out.println(sentencia3Consulta3);
 			while (resultados3.next()) {
 				
 				int codigo = resultados3.getInt("codigo");
 				String nombre = resultados3.getString("equipo1");
 				empatados = resultados3.getInt("empate");
 								
-				equipo= new Equipo(codigo,nombre);
+				equipo= new Equipo(codigo);
 				//partido = new Partido(equipoLocal, equipoVisitante, año_temporada, fecha, puntuacion_local, puntuacion_visitante);
 			}
 			resultados3.close();
@@ -629,11 +631,10 @@ public class AccesoPartido {
 				ConfigBD.cerrarConexion(conexion);
 			}
 		}
-		return equipo;
+		return estadistica;
 		
 	}
-	*/
-	
+
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 	}

@@ -9,6 +9,7 @@ import java.util.List;
 import entrada.Teclado;
 import dao.AccesoPartido;
 import modelo.Equipo;
+import modelo.EquipoEstadistica;
 import modelo.Partido;
 
 /**
@@ -28,9 +29,14 @@ public class MenuPartido {
 		System.out.println("(4) Consultar un partido, por codigo, de la base de datos.");
 		System.out.println("(5) Consultar todos los partidos de la base de datos ordenados por posicion.");
 		System.out.println("(6) Exportar los partidos de la base de datos al fichero de texto.");
-		System.out.println("(7) Importar los partidos del fichero a la base de datos.");
-		System.out.println("(8) Consultar partidos por temporada.");
-		int opcion = Teclado.leerEntero("¿Opcion (0-8)?");
+		System.out.println("(7) Importar los partidos del fichero a la base de datos.\n"
+				+ "(8) Solicitará una temporada y mostrará todos los partidos que se han jugado indicando para cada\n"
+				+ "equipo local-visitante los nombres de los equipos que han jugado en lugar de los códigos, junto con\n"
+				+ "el resto de los campos de equipo.\n" 
+				+ "(9) Solicitará al usuario un equipo y una temporada y mostrará el número total de partidos ganados,\n"
+				+ "perdidos y empatados de ese equipo. ");
+
+		int opcion = Teclado.leerEntero("¿Opcion (0-9)?");
 		return opcion;
 	}
 
@@ -164,19 +170,23 @@ public class MenuPartido {
 				break;
 			
 			case 9:
-			
+				int codigoEquipo = Teclado.leerEntero("Codigo equipo : ");
+				int anyo = Teclado.leerEntero("año de la temporda: ");
+				Equipo equipo = new Equipo(codigoEquipo);
+				EquipoEstadistica equipoEstadistica = AccesoPartido.consultarEstadisticas (equipo, anyo);
+				if(equipoEstadistica == null) {
+					System.out.println("No hay Partidos en la base de datos.");
+				}else {
+					System.out.println(equipoEstadistica);
+				}
 				break;
 			
-			case 10:
-				
-				break;
 				
 			default:
-				System.out.println("La opcion debe estar comprendida entre 0 y 10.");
+				System.out.println("La opcion debe estar comprendida entre 0 y 9.");
 			
 			}
 		} while (opcion != 0);
-		System.out.println("El programa ha finalizado con exito!");
 	}
 
 }
