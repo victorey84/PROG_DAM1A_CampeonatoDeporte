@@ -36,7 +36,7 @@ public class MenuPartido {
 				+ "(9) Solicitará al usuario un equipo y una temporada y mostrará el número total de partidos ganados,\n"
 				+ "perdidos y empatados de ese equipo. ");
 
-		int opcion = Teclado.leerEntero("¿Opcion (0-7)?");
+		int opcion = Teclado.leerEntero("¿Opcion (0-9)?");
 		return opcion;
 	}
 
@@ -183,11 +183,10 @@ public class MenuPartido {
 			
 				
 			default:
-				System.out.println("La opcion debe estar comprendida entre 0 y 10.");
+				System.out.println("La opcion debe estar comprendida entre 0 y 9.");
 			
 			}
 		} while (opcion != 0);
-		System.out.println("El programa ha finalizado con exito!");
 	}
 
 }
